@@ -1,0 +1,18 @@
+c:\users\john\documents\visual studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\BeetleBase.Form1.resources
+c:\users\john\documents\visual studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\BeetleBase.csproj.GenerateResource.Cache
+c:\users\john\documents\visual studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\BeetleBase.Form2.resources
+c:\users\john\documents\visual studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\BeetleBase.Form3.resources
+C:\Users\John\documents\visual studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\BeetleBase.Form4.resources
+C:\Users\John\documents\visual studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\BeetleBase.Form5.resources
+C:\Users\John\documents\visual studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\BeetleBase.Form6.resources
+C:\Users\John\Documents\Visual Studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\Scolytos2.Properties.Resources.resources
+C:\Users\John\Documents\Visual Studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\BeetleBase.csprojResolveAssemblyReference.cache
+C:\Users\John\Documents\Visual Studio 2015\Projects\BeetleBase\BeetleBase\bin\Debug\Scolytos 2 v1.3.0.exe.config
+C:\Users\John\Documents\Visual Studio 2015\Projects\BeetleBase\BeetleBase\bin\Debug\Scolytos 2 v1.3.0.exe.manifest
+C:\Users\John\Documents\Visual Studio 2015\Projects\BeetleBase\BeetleBase\bin\Debug\Scolytos 2 v1.3.0.application
+C:\Users\John\Documents\Visual Studio 2015\Projects\BeetleBase\BeetleBase\bin\Debug\Scolytos 2 v1.3.0.exe
+C:\Users\John\Documents\Visual Studio 2015\Projects\BeetleBase\BeetleBase\bin\Debug\Scolytos 2 v1.3.0.pdb
+C:\Users\John\Documents\Visual Studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\Scolytos 2 v1.3.0.exe.manifest
+C:\Users\John\Documents\Visual Studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\Scolytos 2 v1.3.0.application
+C:\Users\John\Documents\Visual Studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\Scolytos 2 v1.3.0.exe
+C:\Users\John\Documents\Visual Studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\Scolytos 2 v1.3.0.pdb
