@@ -35,6 +35,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.identifiercombo = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -68,6 +69,13 @@
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
+            this.richTextBox4 = new System.Windows.Forms.RichTextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.showVials = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -79,6 +87,8 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(75, 20);
             this.textBox1.TabIndex = 0;
+            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
             this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyUp);
             // 
             // label1
@@ -100,7 +110,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(11, 219);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(825, 129);
+            this.dataGridView1.Size = new System.Drawing.Size(952, 129);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.Click += new System.EventHandler(this.dataGridView1_Click);
@@ -110,7 +120,7 @@
             this.button1.Location = new System.Drawing.Point(253, 159);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(102, 22);
-            this.button1.TabIndex = 15;
+            this.button1.TabIndex = 0;
             this.button1.Text = "Edit Species";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -127,6 +137,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.richTextBox1);
             this.groupBox1.Controls.Add(this.label15);
             this.groupBox1.Controls.Add(this.identifiercombo);
             this.groupBox1.Controls.Add(this.label14);
@@ -161,9 +172,18 @@
             this.groupBox1.Location = new System.Drawing.Point(98, 25);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(572, 188);
-            this.groupBox1.TabIndex = 5;
+            this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Field Info";
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Enabled = false;
+            this.richTextBox1.Location = new System.Drawing.Point(85, 20);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(103, 46);
+            this.richTextBox1.TabIndex = 29;
+            this.richTextBox1.Text = "";
             // 
             // label15
             // 
@@ -180,7 +200,7 @@
             this.identifiercombo.Location = new System.Drawing.Point(112, 160);
             this.identifiercombo.Name = "identifiercombo";
             this.identifiercombo.Size = new System.Drawing.Size(100, 21);
-            this.identifiercombo.TabIndex = 7;
+            this.identifiercombo.TabIndex = 15;
             // 
             // label14
             // 
@@ -197,7 +217,7 @@
             this.pinnedbox.Location = new System.Drawing.Point(50, 161);
             this.pinnedbox.Name = "pinnedbox";
             this.pinnedbox.Size = new System.Drawing.Size(15, 14);
-            this.pinnedbox.TabIndex = 26;
+            this.pinnedbox.TabIndex = 14;
             this.pinnedbox.UseVisualStyleBackColor = true;
             // 
             // comboBox3
@@ -238,7 +258,7 @@
             this.comboBox3.Location = new System.Drawing.Point(208, 118);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(40, 21);
-            this.comboBox3.TabIndex = 11;
+            this.comboBox3.TabIndex = 10;
             // 
             // comboBox2
             // 
@@ -259,7 +279,7 @@
             this.comboBox2.Location = new System.Drawing.Point(166, 118);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(40, 21);
-            this.comboBox2.TabIndex = 10;
+            this.comboBox2.TabIndex = 9;
             // 
             // comboBox1
             // 
@@ -308,14 +328,14 @@
             this.comboBox1.Location = new System.Drawing.Point(114, 118);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(50, 21);
-            this.comboBox1.TabIndex = 9;
+            this.comboBox1.TabIndex = 8;
             // 
             // button3
             // 
             this.button3.Location = new System.Drawing.Point(466, 159);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(102, 22);
-            this.button3.TabIndex = 16;
+            this.button3.TabIndex = 0;
             this.button3.Text = "Exit (No Save)";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -332,7 +352,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(215, 15);
+            this.label12.Location = new System.Drawing.Point(308, 15);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(35, 13);
             this.label12.TabIndex = 24;
@@ -387,7 +407,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(385, 36);
+            this.checkBox1.Location = new System.Drawing.Point(432, 37);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(15, 14);
             this.checkBox1.TabIndex = 4;
@@ -396,7 +416,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(338, 15);
+            this.label5.Location = new System.Drawing.Point(395, 15);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(59, 13);
             this.label5.TabIndex = 16;
@@ -414,7 +434,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(109, 15);
+            this.label3.Location = new System.Drawing.Point(202, 15);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(64, 13);
             this.label3.TabIndex = 14;
@@ -434,32 +454,32 @@
             this.textBox14.Location = new System.Drawing.Point(360, 119);
             this.textBox14.Name = "textBox14";
             this.textBox14.Size = new System.Drawing.Size(100, 20);
-            this.textBox14.TabIndex = 13;
+            this.textBox14.TabIndex = 12;
             // 
             // textBox13
             // 
             this.textBox13.Location = new System.Drawing.Point(466, 119);
             this.textBox13.Name = "textBox13";
             this.textBox13.Size = new System.Drawing.Size(100, 20);
-            this.textBox13.TabIndex = 14;
+            this.textBox13.TabIndex = 13;
             // 
             // textBox11
             // 
-            this.textBox11.Location = new System.Drawing.Point(465, 35);
+            this.textBox11.Location = new System.Drawing.Point(465, 34);
             this.textBox11.Name = "textBox11";
             this.textBox11.Size = new System.Drawing.Size(100, 20);
             this.textBox11.TabIndex = 5;
             // 
             // textBox9
             // 
-            this.textBox9.Location = new System.Drawing.Point(218, 34);
+            this.textBox9.Location = new System.Drawing.Point(311, 34);
             this.textBox9.Name = "textBox9";
             this.textBox9.Size = new System.Drawing.Size(100, 20);
             this.textBox9.TabIndex = 3;
             // 
             // textBox8
             // 
-            this.textBox8.Location = new System.Drawing.Point(112, 34);
+            this.textBox8.Location = new System.Drawing.Point(205, 34);
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(100, 20);
             this.textBox8.TabIndex = 2;
@@ -469,27 +489,27 @@
             this.textBox7.Location = new System.Drawing.Point(254, 119);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(100, 20);
-            this.textBox7.TabIndex = 12;
+            this.textBox7.TabIndex = 11;
             // 
             // textBox5
             // 
             this.textBox5.Location = new System.Drawing.Point(7, 119);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(100, 20);
-            this.textBox5.TabIndex = 8;
+            this.textBox5.TabIndex = 7;
             // 
             // textBox4
             // 
             this.textBox4.Location = new System.Drawing.Point(7, 77);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(558, 20);
-            this.textBox4.TabIndex = 7;
+            this.textBox4.TabIndex = 6;
             // 
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(6, 34);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
+            this.textBox2.Size = new System.Drawing.Size(69, 20);
             this.textBox2.TabIndex = 1;
             this.textBox2.Click += new System.EventHandler(this.textBox2_Enter);
             // 
@@ -527,18 +547,90 @@
             // 
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox1.Location = new System.Drawing.Point(676, 9);
+            this.pictureBox1.Location = new System.Drawing.Point(676, 31);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(160, 157);
+            this.pictureBox1.Size = new System.Drawing.Size(160, 182);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 6;
             this.pictureBox1.TabStop = false;
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.Enabled = false;
+            this.richTextBox2.Location = new System.Drawing.Point(842, 47);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(121, 42);
+            this.richTextBox2.TabIndex = 7;
+            this.richTextBox2.Text = "";
+            // 
+            // richTextBox3
+            // 
+            this.richTextBox3.Enabled = false;
+            this.richTextBox3.Location = new System.Drawing.Point(842, 109);
+            this.richTextBox3.Name = "richTextBox3";
+            this.richTextBox3.Size = new System.Drawing.Size(121, 42);
+            this.richTextBox3.TabIndex = 8;
+            this.richTextBox3.Text = "";
+            this.richTextBox3.TextChanged += new System.EventHandler(this.richTextBox3_TextChanged);
+            // 
+            // richTextBox4
+            // 
+            this.richTextBox4.Enabled = false;
+            this.richTextBox4.Location = new System.Drawing.Point(843, 170);
+            this.richTextBox4.Name = "richTextBox4";
+            this.richTextBox4.Size = new System.Drawing.Size(121, 42);
+            this.richTextBox4.TabIndex = 9;
+            this.richTextBox4.Text = "";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(841, 30);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(54, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Vial Origin";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(841, 91);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(63, 13);
+            this.label16.TabIndex = 11;
+            this.label16.Text = "Vial Country";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(841, 154);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(66, 13);
+            this.label17.TabIndex = 12;
+            this.label17.Text = "Host or Trap";
+            // 
+            // showVials
+            // 
+            this.showVials.Location = new System.Drawing.Point(11, 181);
+            this.showVials.Name = "showVials";
+            this.showVials.Size = new System.Drawing.Size(75, 23);
+            this.showVials.TabIndex = 13;
+            this.showVials.Text = "Show Vials";
+            this.showVials.UseVisualStyleBackColor = true;
+            this.showVials.Click += new System.EventHandler(this.showVials_Click);
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(849, 360);
+            this.ClientSize = new System.Drawing.Size(976, 360);
+            this.Controls.Add(this.showVials);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.richTextBox4);
+            this.Controls.Add(this.richTextBox3);
+            this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
@@ -550,6 +642,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form2";
             this.Text = "Species-In-Vial Manager";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2_FormClosing);
             this.Load += new System.EventHandler(this.Form2_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
@@ -601,5 +694,13 @@
         private System.Windows.Forms.CheckBox pinnedbox;
         private System.Windows.Forms.Label label15;
         public System.Windows.Forms.ComboBox identifiercombo;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.RichTextBox richTextBox3;
+        private System.Windows.Forms.RichTextBox richTextBox4;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Button showVials;
     }
 }

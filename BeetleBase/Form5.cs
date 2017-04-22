@@ -20,6 +20,7 @@ namespace BeetleBase
             this.treeView1.ExpandAll();
             this.thefile = thefile;
             this.ds = new DataSet();
+            this.dsalt = new DataSet();
             this.a = a;
             this.aa = aa;
         }
@@ -79,8 +80,8 @@ namespace BeetleBase
                 }
                 else if (e.Node.Name == "SpeciesTable")
                 {
-                    this.cmd = "SELECT [key], [SpCode], [Tribe], [Genus], [species] FROM [Species_Table_NEW]";
-                    this.currenttable = "[Species_Table_NEW]";
+                    this.cmd = "SELECT [SpCode], [Tribe], [Genus], [species] FROM [Species_table]";
+                    this.currenttable = "[Species_table]";
                     this.cn = "speciestable";
                 }
                 else
@@ -89,9 +90,43 @@ namespace BeetleBase
                 }
                 OleDbCommand vialsearch = new OleDbCommand(this.cmd, this.thefile.dbo);
                 this.vialadapter = new OleDbDataAdapter(vialsearch);
-                DataSet vials = new DataSet();
+                //                DataSet vials = new DataSet();
                 vialadapter.Fill(ds, "TABLE");
-                this.dataGridView1.DataSource = ds.Tables[0];
+//                if (this.cn == "speciestable")
+//                {
+//                    DataGridViewTextBoxColumn key = new DataGridViewTextBoxColumn();
+//                    key.Name = "key";
+//                    DataGridViewTextBoxColumn spcode = new DataGridViewTextBoxColumn();
+//                    spcode.Name = "SpCode";
+//                    DataGridViewComboBoxColumn trb = new DataGridViewComboBoxColumn();
+//                    trb.Name = "Tribe";
+//                    DataGridViewComboBoxColumn genus = new DataGridViewComboBoxColumn();
+//                    genus.Name = "Genus";
+//                    DataGridViewComboBoxColumn spc = new DataGridViewComboBoxColumn();
+//                    spc.Name = "Species";
+//                    dataGridView1.Columns.AddRange(key, spcode, trb, genus, spc);
+//                    int ii = 0;
+//                    foreach (DataRow i in ds.Tables[0].Rows)
+//                    {
+//                        int a = dataGridView1.Rows.Add(i[0], i[1]);
+//                        ((DataGridViewComboBoxCell)dataGridView1.Rows[a].Cells[2]).Items.Add(i[2]);
+//                        ii++;
+//                    }
+//                }
+//                else
+//                {
+                    this.dataGridView1.DataSource = ds.Tables[0];
+                //                }
+                if (this.cn == "speciestable")
+                {
+                    dataGridView1.Columns[0].Visible = false;
+                    this.dataGridView1.AllowUserToDeleteRows = true;
+                }
+                else
+                {
+                    this.dataGridView1.AllowUserToDeleteRows = false;
+                }
+                this.additionalRows = new Dictionary<int, int>();
             }
             catch (OleDbException err)
             {
@@ -101,71 +136,17 @@ namespace BeetleBase
 
         public DB thefile;
         public Form2 aa;
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //            AllocConsole();
-            DataSet s = ds.GetChanges();
-            OleDbDataAdapter inserter = new OleDbDataAdapter();
-            if (s != null)
-            {
-                if (this.thefile.dbo.State != ConnectionState.Open)
-                {
-                    this.thefile.dbo.Open();
-                }
-                int srowcount = s.Tables["TABLE"].Rows.Count;
-                for (int i = 0; i < srowcount; i++)
-                {
-//                    MessageBox.Show(s.Tables["TABLE"].Rows[i][0].ToString().Trim());
-                    if (this.cn == "speciestable")
-                    {
-                        if 
-                        (
-                            s.Tables["TABLE"].Rows[i][1].ToString().Trim() == "" &&
-                            s.Tables["TABLE"].Rows[i][4].ToString().Trim() == ""
-                        )
-                        {
-                            return;
-                        }
-                        string cmd = "INSERT INTO "
-                        + this.currenttable
-                        + " ([key], [SpCode], [Tribe], [Genus], [Species])"
-                        + " VALUES ("
-                        + s.Tables["TABLE"].Rows[i][0].ToString() + ", "
-                        + s.Tables["TABLE"].Rows[i][1].ToString() + ", '"
-                        + s.Tables["TABLE"].Rows[i][2].ToString() + "', '"
-                        + s.Tables["TABLE"].Rows[i][3].ToString() + "', '"
-                        + s.Tables["TABLE"].Rows[i][4].ToString()
-                        + "');";
-                        OleDbCommand a = new OleDbCommand(cmd, this.thefile.dbo);
-                        inserter.InsertCommand = a;
-                        inserter.InsertCommand.ExecuteNonQuery();
-                    }
-                    else if (s.Tables["TABLE"].Rows[i][0].ToString().Trim() != "")
-                    {
-                        //                    Console.WriteLine(s.Tables["TABLE"].Rows[i][0].ToString());
-                        string cmd = "INSERT INTO "
-                        + this.currenttable
-                        + " (["
-                        + this.cn
-                        + "]) VALUES ('"
-                        + s.Tables["TABLE"].Rows[i][0].ToString()
-                        + "');";
-                        OleDbCommand a = new OleDbCommand(cmd, this.thefile.dbo);
-                        inserter.InsertCommand = a;
-                        inserter.InsertCommand.ExecuteNonQuery();
-                    }
-                }
-            }
-        }
-
         public string cmd;
         public DataSet ds;
+        public DataSet dsalt;
         public OleDbDataAdapter vialadapter;
         public string currenttable;
         public string currentname;
         public string cn;
         public Form4 a;
+        public Dictionary<int, int> additionalRows = new Dictionary<int, int>();
+        public Dictionary<int, string> additionalRowsStr = new Dictionary<int, string>();
+        public List<int> subtractionalRows = new List<int>();
 
         private void Form5_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -236,14 +217,243 @@ namespace BeetleBase
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex > 0 && e.ColumnIndex > 0)
+            try
             {
-                dataGridView1.Rows[e.RowIndex].ReadOnly = true;
-                if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim() == "")
+                if (e.RowIndex > 0 && e.ColumnIndex > 0)
                 {
-                    dataGridView1.Rows[e.RowIndex].ReadOnly = false;
+                    dataGridView1.Rows[e.RowIndex].ReadOnly = true;
+                    if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim() == "")
+                    {
+                        dataGridView1.Rows[e.RowIndex].ReadOnly = false;
+                    }
                 }
             }
+            catch (IndexOutOfRangeException)
+            {
+//                MessageBox.Show("a");
+            }
         }
+
+        private void dataGridView1_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            if (this.thefile.dbo.State != ConnectionState.Open) this.thefile.dbo.Open(); 
+            if ((MessageBox.Show("Are you sure you want to remove this item?", "Delete species",
+    MessageBoxButtons.YesNo, MessageBoxIcon.Question,
+    MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes))
+            {
+                if (this.cn == "speciestable")
+                {
+                    var del = dataGridView1.Rows[e.Row.Index].Cells[0].Value.ToString().Trim();
+                    string deleter;
+                    string predeleter;
+                    if (del == "")
+                    {
+                        deleter = "DELETE FROM [Species_table] WHERE [SpCode] Is Null";
+                        predeleter = "DELETE FROM [SPECIES_IN_COLLECTIONS] WHERE [SpCode] Is Null";
+                    }
+                    else
+                    {
+                        deleter = "DELETE FROM [Species_table] WHERE [SpCode] = " + del;
+                        predeleter = "DELETE FROM [SPECIES_IN_COLLECTIONS] WHERE [SpCode] Is Null";
+                    }
+                    OleDbCommand prefirst = new OleDbCommand(predeleter, this.thefile.dbo);
+                    OleDbCommand first = new OleDbCommand(deleter, this.thefile.dbo);
+                    prefirst.ExecuteNonQuery();
+                    first.ExecuteNonQuery();
+                }
+                else if (this.cn == "capture type")
+                {
+                    var del = dataGridView1.Rows[e.Row.Index].Cells[0].Value.ToString().Trim();
+                    string deleter;
+                    if (del == "")
+                    {
+                        deleter = "DELETE FROM " + this.currenttable + " WHERE [capture type] Is Null";
+                    }
+                    else
+                    {
+                        deleter = "DELETE FROM " + this.currenttable + " WHERE [capture type] = '" + del + "'";
+                    }
+                    OleDbCommand first = new OleDbCommand(deleter, this.thefile.dbo);
+                    first.ExecuteNonQuery();
+                }
+                else if (this.cn == "country")
+                {
+                    var del = dataGridView1.Rows[e.Row.Index].Cells[0].Value.ToString().Trim();
+                    string deleter;
+                    if (del == "")
+                    {
+                        deleter = "DELETE FROM " + this.currenttable + " WHERE [country] Is Null";
+                    }
+                    else
+                    {
+                        deleter = "DELETE FROM " + this.currenttable + " WHERE [country] = '" + del + "'";
+                    }
+                    OleDbCommand first = new OleDbCommand(deleter, this.thefile.dbo);
+                    first.ExecuteNonQuery();
+                }
+                else if (this.cn == "experiment")
+                {
+                    var del = dataGridView1.Rows[e.Row.Index].Cells[0].Value.ToString().Trim();
+                    string deleter;
+                    if (del == "")
+                    {
+                        deleter = "DELETE FROM " + this.currenttable + " WHERE [experiment] Is Null";
+                    }
+                    else
+                    {
+                        deleter = "DELETE FROM " + this.currenttable + " WHERE [experiment] = '" + del + "'";
+                    }
+                    OleDbCommand first = new OleDbCommand(deleter, this.thefile.dbo);
+                    first.ExecuteNonQuery();
+                }
+                else if (this.cn == "fungus")
+                {
+                    var del = dataGridView1.Rows[e.Row.Index].Cells[0].Value.ToString().Trim();
+                    string deleter;
+                    if (del == "")
+                    {
+                        deleter = "DELETE FROM " + this.currenttable + " WHERE [fungus] Is Null";
+                    }
+                    else
+                    {
+                        deleter = "DELETE FROM " + this.currenttable + " WHERE [fungus] = '" + del + "'";
+                    }
+                    OleDbCommand first = new OleDbCommand(deleter, this.thefile.dbo);
+                    first.ExecuteNonQuery();
+                }
+                else if (this.cn == "province")
+                {
+                    var del = dataGridView1.Rows[e.Row.Index].Cells[0].Value.ToString().Trim();
+                    string deleter;
+                    if (del == "")
+                    {
+                        deleter = "DELETE FROM " + this.currenttable + " WHERE [province] Is Null";
+                    }
+                    else
+                    {
+                        deleter = "DELETE FROM " + this.currenttable + " WHERE [province] = '" + del + "'";
+                    }
+                    OleDbCommand first = new OleDbCommand(deleter, this.thefile.dbo);
+                    first.ExecuteNonQuery();
+                }
+                else if (this.cn == "identifier")
+                {
+                    var del = dataGridView1.Rows[e.Row.Index].Cells[0].Value.ToString().Trim();
+                    string deleter;
+                    if (del == "")
+                    {
+                        deleter = "DELETE FROM " + this.currenttable + " WHERE [identifier] Is Null";
+                    }
+                    else
+                    {
+                        deleter = "DELETE FROM " + this.currenttable + " WHERE [identifier] = '" + del + "'";
+                    }
+                    OleDbCommand first = new OleDbCommand(deleter, this.thefile.dbo);
+                    first.ExecuteNonQuery();
+                }
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void dataGridView1_UserAddedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            if (this.cn == "speciestable")
+            {
+                DataSet top = new DataSet();
+                OleDbCommand first = new OleDbCommand("SELECT TOP 1 [SpCode] FROM [Species_table] ORDER BY [SpCode] DESC", this.thefile.dbo);
+                OleDbDataAdapter topdown = new OleDbDataAdapter(first);
+                topdown.Fill(top, "FIRST");
+                this.additionalRows.Add((e.Row.Index - 1), (Int32.Parse(top.Tables["FIRST"].Rows[0][0].ToString()) + 1));
+                dataGridView1.Rows[(e.Row.Index - 1)].Cells[0].Value = (Int32.Parse(top.Tables["FIRST"].Rows[0][0].ToString()) + 1);
+            }
+            else
+            {
+                this.additionalRows.Add((e.Row.Index - 1), 0);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+//            string display = "";
+//            foreach (var a in this.additionalRows)
+//           {
+//                display += a.Key.ToString() + " => " + a.Value.ToString() + ", ";
+//            }
+//            MessageBox.Show(display);
+            foreach (var a in this.additionalRows)
+            {
+                if (this.thefile.dbo.State != ConnectionState.Open) this.thefile.dbo.Open();
+                try
+                {
+                    string inserter = "";
+                    if (this.cn == "speciestable")
+                    {
+                        inserter = "INSERT INTO [Species_table] ([Tribe], [Genus], [species]) VALUES ("
+                        + a.Value.ToString() + ", "
+//                        + dataGridView1.Rows[a.Key].Cells[0].Value.ToString() + ", '"
+                        + dataGridView1.Rows[a.Key].Cells[1].Value.ToString() + "', '"
+                        + dataGridView1.Rows[a.Key].Cells[2].Value.ToString() + "', '"
+                        + dataGridView1.Rows[a.Key].Cells[3].Value.ToString() + "')";
+                    }
+                    else if (this.cn == "capture type")
+                    {
+                        inserter = "INSERT INTO "
+                        + this.currenttable
+                        + " ([capture type]) VALUES ('"
+                        + dataGridView1.Rows[a.Key].Cells[0].Value.ToString()
+                        + "')";
+                    }
+                    else if (this.cn == "country")
+                    {
+                        inserter = "INSERT INTO "
+                        + this.currenttable
+                        + " ([country]) VALUES ('"
+                        + dataGridView1.Rows[a.Key].Cells[0].Value.ToString()
+                        + "')";
+                    }
+                    else if (this.cn == "experiment")
+                    {
+                        inserter = "INSERT INTO "
+                        + this.currenttable
+                        + " ([experiment]) VALUES ('"
+                        + dataGridView1.Rows[a.Key].Cells[0].Value.ToString()
+                        + "')";
+                    }
+                    else if (this.cn == "fungus")
+                    {
+                        inserter = "INSERT INTO "
+                        + this.currenttable
+                        + " ([fungus]) VALUES ('"
+                        + dataGridView1.Rows[a.Key].Cells[0].Value.ToString()
+                        + "')";
+                    }
+                    else if (this.cn == "province")
+                    {
+                        inserter = "INSERT INTO "
+                        + this.currenttable
+                        + " ([province]) VALUES ('"
+                        + dataGridView1.Rows[a.Key].Cells[0].Value.ToString()
+                        + "')";
+                    }
+                    else if (this.cn == "identifier")
+                    {
+                        inserter = "INSERT INTO "
+                        + this.currenttable
+                        + " ([identifier]) VALUES ('"
+                        + dataGridView1.Rows[a.Key].Cells[0].Value.ToString()
+                        + "')";
+                    }
+                    OleDbCommand cmd = new OleDbCommand(inserter, this.thefile.dbo);
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException err)
+                {
+                    err.ToString();
+                }
+            }
+       }
     }
 }

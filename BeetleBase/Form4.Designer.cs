@@ -70,6 +70,8 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
+            this.showSpecies = new System.Windows.Forms.Button();
+            this.speciesLookUp = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -89,16 +91,18 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 39);
+            this.textBox1.Location = new System.Drawing.Point(12, 23);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(102, 20);
             this.textBox1.TabIndex = 0;
+            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
             this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyUp);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(21, 23);
+            this.label1.Location = new System.Drawing.Point(21, 7);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(84, 13);
             this.label1.TabIndex = 2;
@@ -602,7 +606,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(12, 97);
+            this.button5.Location = new System.Drawing.Point(12, 81);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(102, 23);
             this.button5.TabIndex = 0;
@@ -612,7 +616,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(12, 66);
+            this.button4.Location = new System.Drawing.Point(12, 50);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(102, 23);
             this.button4.TabIndex = 0;
@@ -622,7 +626,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(12, 129);
+            this.button3.Location = new System.Drawing.Point(12, 113);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(102, 23);
             this.button3.TabIndex = 0;
@@ -645,7 +649,7 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(12, 160);
+            this.button7.Location = new System.Drawing.Point(12, 144);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(102, 23);
             this.button7.TabIndex = 0;
@@ -653,11 +657,36 @@
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
+            // showSpecies
+            // 
+            this.showSpecies.Location = new System.Drawing.Point(12, 175);
+            this.showSpecies.Name = "showSpecies";
+            this.showSpecies.Size = new System.Drawing.Size(102, 23);
+            this.showSpecies.TabIndex = 4;
+            this.showSpecies.Text = "Show Species";
+            this.showSpecies.UseVisualStyleBackColor = true;
+            this.showSpecies.Click += new System.EventHandler(this.showSpecies_Click);
+            // 
+            // speciesLookUp
+            // 
+            this.speciesLookUp.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.speciesLookUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.speciesLookUp.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.speciesLookUp.Location = new System.Drawing.Point(302, 3);
+            this.speciesLookUp.Name = "speciesLookUp";
+            this.speciesLookUp.Size = new System.Drawing.Size(195, 23);
+            this.speciesLookUp.TabIndex = 5;
+            this.speciesLookUp.Text = "Species Lookup";
+            this.speciesLookUp.UseVisualStyleBackColor = false;
+            this.speciesLookUp.Click += new System.EventHandler(this.speciesLookUp_Click);
+            // 
             // Form4
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(710, 332);
+            this.Controls.Add(this.speciesLookUp);
+            this.Controls.Add(this.showSpecies);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button3);
@@ -671,6 +700,7 @@
             this.Location = new System.Drawing.Point(0, 345);
             this.Name = "Form4";
             this.Text = "Vial Manager";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form4_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -722,5 +752,7 @@
         private System.Windows.Forms.ComboBox comboBox10;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button showSpecies;
+        private System.Windows.Forms.Button speciesLookUp;
     }
 }

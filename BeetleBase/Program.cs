@@ -7,6 +7,7 @@ using System.IO;
 using System.Data.OleDb;
 using System.Data;
 using System.Runtime.InteropServices;
+using Scolytos2;
 
 namespace BeetleBase
 {
@@ -30,15 +31,29 @@ namespace BeetleBase
 
         static void subMain(string startupsave, Previous startup, DB thefile, string startupsave2, mutual mutual)
         {
+            thefile.exitloop = true;
+            
             Form a = new Form1(startupsave, startup, thefile, startupsave2);
             a.StartPosition = FormStartPosition.CenterScreen;
             Application.Run(a);
             if (thefile.OK == 1 && thefile.goahead)
             {
-                Form b = new Form2(thefile, mutual);
-                b.StartPosition = FormStartPosition.Manual;
-                b.Location = new System.Drawing.Point(0, 320);
-                Application.Run(b);
+                //                formholder formhold = new BeetleBase.formholder();
+                //                formhold.form2 = new Form2(thefile, mutual, formhold);
+                //this.vial = new Form4(mutual, thefile, formhold.form2);
+                //formhold.form2.StartPosition = FormStartPosition.Manual;
+                //formhold.form2.Location = new System.Drawing.Point(0, 320);
+                //formhold.form2.formhold = formhold;
+                //                Application.Run(formhold.form2);
+                //                Application.Run(this.vial);
+//                Application.Run(new Scolytos2.Form8(thefile, mutual));
+                Scolytos2.Form8 mainform = new Scolytos2.Form8(thefile, mutual);
+                Application.Run();
+
+            }
+            else if (thefile.exitloop)
+            {
+                Application.Exit();
             }
             else
             {
@@ -110,6 +125,7 @@ namespace BeetleBase
         public string root;
         public bool goahead = false;
         public string watch;
+        public bool exitloop = true;
     }
 
     public class mutual
@@ -117,4 +133,15 @@ namespace BeetleBase
         public string result1;
     }
 
+    public class formholder
+    {
+        public Form2 form2;
+        public Form4 form4;
+        public Form showboth()
+        {
+            this.form2.Show();
+            this.form4.Show();
+            return new Form();
+        }
+    }
 }

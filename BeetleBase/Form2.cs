@@ -26,6 +26,7 @@ namespace BeetleBase
         public string currentrecord;
         public FileSystemWatcher watcher;
         public bool editting = false;
+        public bool itsUnderControl;
 
         [DllImport("kernel32.dll", SetLastError = true)]
         internal static extern int AllocConsole();
@@ -56,20 +57,15 @@ namespace BeetleBase
             this.identifiercombo.Enabled = set;
             this.button7.Enabled = set;
         }
-        public Form2(DB thefile, mutual mutual)
+
+        public void initializeComponent()
         {
             InitializeComponent();
-
-            this.vial = new Form4(this.mutual, thefile, this);
-            this.vial.StartPosition = FormStartPosition.Manual;
-            this.vial.Location = new System.Drawing.Point(0, 0);
-            this.vial.Show();
-            this.thefile = thefile;
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new System.Drawing.Point(0, 350);
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.DataSource = this.thefile.main.Tables[0];
             this.dataGridView1.Columns[13].Visible = false;
-            this.mutual = mutual;
-            form2editenable(false);
             try
             {
                 string getidentifiers = "SELECT * FROM [COLLECTIONS- Drop Down Identifiers]";
@@ -80,13 +76,23 @@ namespace BeetleBase
                 int identifierscount = iddropdown.Tables["ID"].Rows.Count;
                 for (int i = 0; i < identifierscount; i++)
                 {
-                    identifiercombo.Items.Add(iddropdown.Tables["ID"].Rows[i][0]);
+                    string jj = iddropdown.Tables["ID"].Rows[i][1].ToString();
+                    identifiercombo.Items.Add(jj);
                 }
             }
             catch (OleDbException err)
             {
                 MessageBox.Show(err.ToString());
             }
+            form2editenable(false);
+        }
+        public Form2(DB thefile, mutual mutual)
+        {
+            //            InitializeComponent();
+
+            //           this.vial = form4;
+            this.thefile = thefile;
+            this.mutual = mutual;
 
             this.watcher = new FileSystemWatcher();
             this.watcher.SynchronizingObject = this;
@@ -103,8 +109,19 @@ namespace BeetleBase
 
         public void textBox1_KeyUp(object sender, KeyEventArgs e)
         {
-
-            string cmd = "SELECT b.[record], a.[vial], (c.[SpCode] & ' - ' & c.[Genus] & ' ' & c.[Species]) as [Species In Vial], b.[count], b.[male], b.[pair/family], b.[collector/museum], b.[SPECIES_note], b.[borrowed_count], b.[returned_date], b.[loaned_to], b.[loaned_number], b.[from plate], b.[SpCode], b.[PINNED], d.[identifier] FROM ((([COLLECTIONS] a LEFT OUTER JOIN [SPECIES_IN_COLLECTIONS] b ON a.[vial] = b.[vial]) LEFT OUTER JOIN [Species_table_NEW] c ON b.[SpCode] = c.[SpCode]) LEFT OUTER JOIN [Identifiers] d on b.[record] = d.[record]) ";
+            if (itsUnderControl)
+            {
+                itsUnderControl = false;
+                return;
+            }
+            if (e != null && e.KeyCode.ToString() != "Return")
+            {
+                return;
+            }
+            richTextBox2.Clear();
+            richTextBox3.Clear();
+            richTextBox4.Clear();
+            string cmd = "SELECT b.[record], a.[vial], (c.[SpCode] & ' - ' & c.[Genus] & ' ' & c.[Species]) as [Species In Vial], b.[count], b.[male], b.[pair/family], b.[collector/museum], b.[SPECIES_note], b.[borrowed_count], b.[returned_date], b.[loaned_to], b.[loaned_number], b.[from plate], b.[SpCode], b.[PINNED], d.[identifier] FROM ((([COLLECTIONS] a LEFT OUTER JOIN [SPECIES_IN_COLLECTIONS] b ON a.[vial] = b.[vial]) LEFT OUTER JOIN [Species_table] c ON b.[SpCode] = c.[SpCode]) LEFT OUTER JOIN [Identifiers] d on b.[record] = d.[record]) ";
             if (textBox1.Text.Trim() != "")
             {
                 cmd += "WHERE a.[vial] = " + textBox1.Text;
@@ -210,8 +227,26 @@ namespace BeetleBase
             this.Cursor = Cursors.WaitCursor;
             Form popup = new Form3(this.thefile, this.mutual);
             popup.ShowDialog();
+            if (this.mutual.result1 == null)
+            {
+                return;
+            }
             this.textBox2.Text = this.mutual.result1;
             this.Cursor = Cursors.Default;
+            DataSet speciesDisplay = new DataSet();
+            string speciesDisplayCommand = "SELECT ([Genus] & ' ' & [species]) as [speciesDisplay] FROM [Species_table] WHERE [SpCode] = ";
+            speciesDisplayCommand += this.mutual.result1;
+            OleDbCommand speciesIdentifier = new OleDbCommand(speciesDisplayCommand, this.thefile.dbo);
+            OleDbDataAdapter speciesId = new OleDbDataAdapter(speciesIdentifier);
+            speciesId.Fill(speciesDisplay, "speciesId");
+            try
+            {
+                this.richTextBox1.Text = speciesDisplay.Tables[0].Rows[0][0].ToString();
+            }
+            catch (NullReferenceException err)
+            {
+                MessageBox.Show(err.ToString());
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -384,7 +419,8 @@ namespace BeetleBase
         {
             if (!this.vial.Visible)
             {
-                this.vial = new Form4(this.mutual, this.thefile, this);
+                this.vial = new Form4(this.mutual, this.thefile);
+                this.vial.aa = this;
                 this.vial.Show();
             }
             else
@@ -399,7 +435,8 @@ namespace BeetleBase
         {
             if (!this.vial.Visible)
             {
-                this.vial = new Form4(this.mutual, this.thefile, this);
+                this.vial = new Form4(this.mutual, this.thefile);
+                this.vial.aa = this;
                 this.vial.Show();
             }
             else
@@ -717,7 +754,7 @@ namespace BeetleBase
                     try
                     {
                     */
-                    string cmd = "SELECT * FROM [Images] WHERE [code] = " + editted[0].Cells[13].Value.ToString() + " ORDER BY [code] ASC";
+                    string cmd = "SELECT * FROM [Images] WHERE [SpCode] = " + editted[0].Cells[13].Value.ToString() + " ORDER BY [code] ASC";
                     OleDbCommand test = new OleDbCommand(cmd, this.thefile.dbo);
                     OleDbDataAdapter begin = new OleDbDataAdapter(test);
                     this.dataset = new DataSet();
@@ -757,12 +794,46 @@ namespace BeetleBase
                     this.pictureBox1.Image = null;
                 }
             }
+            if (col[1].Value.ToString() != null)
+            {
+                DataSet vialInfo = new DataSet();
+                string vialInfoQuery = "SELECT [locality], [county], [province], [Country], [host_or_trap] FROM [COLLECTIONS] WHERE [vial] = " + col[1].Value.ToString();
+                OleDbCommand vialInfoQueryCommand = new OleDbCommand(vialInfoQuery, this.thefile.dbo);
+                OleDbDataAdapter vialInfoAdapter = new OleDbDataAdapter(vialInfoQueryCommand);
+                vialInfoAdapter.Fill(vialInfo);
+                vialInfoAdapter.Dispose();
+                DataRow vialInfoResults = vialInfo.Tables[0].Rows[0];
+                richTextBox2.Clear();
+                richTextBox3.Clear();
+                richTextBox4.Clear();
+                if (vialInfoResults[0].ToString().Trim() != "") { richTextBox2.Text = vialInfoResults[0].ToString(); }
+                if (vialInfoResults[1].ToString().Trim() != "" && vialInfoResults[0].ToString().Trim() != "")
+                {
+                    richTextBox2.Text += ", " + vialInfoResults[1].ToString();
+                }
+                else if (vialInfoResults[1].ToString().Trim() != "")
+                {
+                    richTextBox2.Text = vialInfoResults[1].ToString();
+                }
+                if ((vialInfoResults[2].ToString().Trim() != "" || vialInfoResults[0].ToString().Trim() != "") && vialInfoResults[1].ToString().Trim() != "")
+                {
+                    richTextBox2.Text += ", " + vialInfoResults[2].ToString();
+                }
+                else if (vialInfoResults[2].ToString().Trim() != "")
+                {
+                    richTextBox2.Text = vialInfoResults[2].ToString();
+                }
+                if (vialInfoResults[3].ToString().Trim() != "") { richTextBox3.Text = vialInfoResults[3].ToString(); }
+                if (vialInfoResults[4].ToString().Trim() != "") { richTextBox4.Text = vialInfoResults[4].ToString(); }
+            }
         }
 
         private void Form2_Load(object sender, EventArgs e)
         {
 
         }
+
+        public formholder formhold;
 
         public void OnChange(object source, FileSystemEventArgs e)
         {
@@ -784,6 +855,59 @@ namespace BeetleBase
             }
         }
 
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (itsUnderControl) { return; }
+            if (!char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void richTextBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Back)
+            {
+                this.itsUnderControl = true;
+                return;
+            }
+            if ((!e.Control && (e.KeyCode != Keys.A || e.KeyCode != Keys.C || e.KeyCode != Keys.X || e.KeyCode != Keys.V)))
+            {
+                e.Handled = true;
+            }
+            else
+            {
+                this.itsUnderControl = true;
+            }
+        }
+
+        private void Form2_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (this.vial.IsDisposed)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void showVials_Click(object sender, EventArgs e)
+        {
+            if (this.vial.Visible)
+            {
+                this.vial.Focus();
+            }
+            if (this.vial.IsDisposed)
+            {
+                this.vial = new BeetleBase.Form4(this.mutual, this.thefile);
+                this.vial.aa = this;
+                this.vial.initializeComponent();
+                this.vial.Show();
+            }
+        }
     }
 
     internal static class FormExtensions

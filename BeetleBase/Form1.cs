@@ -46,6 +46,7 @@ namespace BeetleBase
 
         private void button2_Click(object sender, EventArgs e)
         {
+            this.thefile.exitloop = false;
             this.Cursor = Cursors.WaitCursor;
             this.Text = "Scolytos 2 (Loading...)";
 //            string preconnect = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=";
@@ -56,7 +57,7 @@ namespace BeetleBase
             this.thefile.dbo = new OleDbConnection(connect);
             try
             {
-                OleDbCommand test = new OleDbCommand("SELECT b.[record], a.[vial], (c.[SpCode] & ' - ' & c.[Genus] & ' ' & c.[Species]) as [Species In Vial], b.[count], b.[male], b.[pair/family], b.[collector/museum], b.[SPECIES_note], b.[borrowed_count], b.[returned_date], b.[loaned_to], b.[loaned_number], b.[from plate], b.[SpCode], b.[PINNED], d.[identifier] FROM ((([COLLECTIONS] a LEFT OUTER JOIN [SPECIES_IN_COLLECTIONS] b ON a.[vial] = b.[vial]) LEFT OUTER JOIN [Species_table_NEW] c ON b.[SpCode] = c.[SpCode]) LEFT OUTER JOIN [Identifiers] d on b.[record] = d.[record])", this.thefile.dbo);
+                OleDbCommand test = new OleDbCommand("SELECT b.[record], a.[vial], (c.[SpCode] & ' - ' & c.[Genus] & ' ' & c.[Species]) as [Species In Vial], b.[count], b.[male], b.[pair/family], b.[collector/museum], b.[SPECIES_note], b.[borrowed_count], b.[returned_date], b.[loaned_to], b.[loaned_number], b.[from plate], b.[SpCode], b.[PINNED], d.[identifier] FROM ((([COLLECTIONS] a LEFT OUTER JOIN [SPECIES_IN_COLLECTIONS] b ON a.[vial] = b.[vial]) LEFT OUTER JOIN [Species_table] c ON b.[SpCode] = c.[SpCode]) LEFT OUTER JOIN [Identifiers] d on b.[record] = d.[record])", this.thefile.dbo);
 
                 OleDbDataAdapter begin = new OleDbDataAdapter(test);
                 begin.Fill(this.thefile.main);
@@ -67,8 +68,9 @@ namespace BeetleBase
                 begin2.Dispose();
                 thefile.goahead = true;
             }
-            catch (Exception)
+            catch (Exception error)
             {
+                MessageBox.Show(error.ToString());
                 MessageBox.Show("Cannot create connection to file used!");
 //                button1_Click(null, null);
                 return;

@@ -40,13 +40,12 @@ namespace BeetleBase
             this.button7.Enabled = !a;
         }
 
-        public Form4(mutual mutual, DB thefile, Form2 aa)
+        public void initializeComponent()
         {
             InitializeComponent();
             form4editenable(false);
-            this.mutual = mutual;
-            this.thefile = thefile;
-            this.aa = aa;
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new System.Drawing.Point(0, 0);
             this.button5.Enabled = false;
             this.dataGridView1.DataSource = this.thefile.main2.Tables[0];
             DataSet dropdowns = new DataSet();
@@ -96,12 +95,32 @@ namespace BeetleBase
             dropdown.Dispose();
         }
 
+        public Form4(mutual mutual, DB thefile)
+        {
+
+            this.mutual = mutual;
+            this.thefile = thefile;
+        }
+
         public mutual mutual;
         public DB thefile;
         public Form2 aa;
         public void textBox1_KeyUp(object sender, KeyEventArgs e)
         {
-            string cmd = "SELECT * FROM [COLLECTIONS] WHERE vial = " + textBox1.Text;
+            if (itsUnderControl)
+            {
+                itsUnderControl = false;
+                return;
+            }
+            if (e != null && e.KeyCode.ToString() != "Return")
+            {
+                return;
+            }
+            string cmd = "SELECT * FROM [COLLECTIONS] WHERE vial Is Not Null";
+            if (textBox1.Text.Trim() != "")
+            {
+                cmd = "SELECT * FROM [COLLECTIONS] WHERE vial = " + textBox1.Text;
+            }
             OleDbCommand vialsearch = new OleDbCommand(cmd, this.thefile.dbo);
             OleDbDataAdapter vialadapter = new OleDbDataAdapter(vialsearch);
             DataSet vials = new DataSet();
@@ -214,7 +233,7 @@ namespace BeetleBase
 
         public string currentvial;
         public bool editting = false;
-
+        public bool itsUnderControl;
         private void button2_Click(object sender, EventArgs e)
         {
             this.editting = false;
@@ -223,7 +242,7 @@ namespace BeetleBase
                 this.thefile.dbo.Open();
             }
             string updatemaster = "UPDATE [COLLECTIONS] SET ";
-            updatemaster += " [experiment] = " + comboBox1.Text + "'";
+            updatemaster += " [experiment] = '" + comboBox1.Text + "'";
             if (textBox4.Text == "")
             {
                 //                updatemaster += ", [Count] = null";
@@ -232,7 +251,7 @@ namespace BeetleBase
             {
                 updatemaster += ", [field_vial] = " + textBox4.Text;
             }
-            updatemaster += ", [host_or_trap] = " + textBox5.Text + "'";
+            updatemaster += ", [host_or_trap] = '" + textBox5.Text + "'";
             updatemaster += ", [capture->storage] = '" + comboBox2.Text + "'";
             updatemaster += ", [fungus] = '" + comboBox3.Text + "'";
             updatemaster += ", [locality] = '" + textBox8.Text + "'";
@@ -255,7 +274,7 @@ namespace BeetleBase
                 updatemaster += ", [date] = '" + comboBox8.Text + "/" + comboBox9.Text + "/" + comboBox7.Text + "'";
             }
             updatemaster += ", [VIAL_note] = '" + textBox13.Text + "'";
-            updatemaster += ", [collector/museum] = '" + comboBox6 + "'";
+            updatemaster += ", [collector/museum] = '" + comboBox6.Text + "'";
             if 
                 (
                 comboBox11.Text != "" 
@@ -279,9 +298,12 @@ namespace BeetleBase
                 upd.UpdateCommand = up;
                 upd.UpdateCommand.ExecuteNonQuery();
             }
-            catch (OleDbException)
+            catch (OleDbException error)
             {
                 MessageBox.Show("Unable to write. Check to make sure information is valid!");
+                MessageBox.Show(error.ToString());
+                MessageBox.Show(updatemaster);
+                return;
             }
             textBox1_KeyUp(null, null);
             button3_Click(null, null);
@@ -479,5 +501,70 @@ namespace BeetleBase
                 textBox1_KeyUp(null, null);
             }
         }
+
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (itsUnderControl) { return; }
+            if (!char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Back)
+            {
+                this.itsUnderControl = true;
+                return;
+            }
+            if ((!e.Control && (e.KeyCode != Keys.A || e.KeyCode != Keys.C || e.KeyCode != Keys.X || e.KeyCode != Keys.V)))
+            {
+                e.Handled = true;
+            }
+            else
+            {
+                this.itsUnderControl = true;
+            }
+        }
+
+        private void Form4_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (this.aa.IsDisposed)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void showSpecies_Click(object sender, EventArgs e)
+        {
+            if (this.aa.Visible)
+            {
+                this.aa.Focus();
+            }
+            if (this.aa.IsDisposed)
+            {
+                this.aa = new Form2(this.thefile, this.mutual);
+                this.aa.vial = this;
+                this.aa.initializeComponent();
+                this.aa.Show();
+            }
+        }
+
+        public Scolytos2.speciesLookUpForm speciesLookUpForm;
+
+        private void speciesLookUp_Click(object sender, EventArgs e)
+        {
+            if (this.speciesLookUpForm == null || this.speciesLookUpForm.IsDisposed)
+            {
+                this.speciesLookUpForm = new Scolytos2.speciesLookUpForm(this, this.mutual, this.thefile);
+                this.speciesLookUpForm.Show();
+            }
+            if (this.speciesLookUpForm != null && this.speciesLookUpForm.Visible)
+            {
+                this.speciesLookUpForm.Focus();
+            }
+       }
     }
 }

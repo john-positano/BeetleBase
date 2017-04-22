@@ -18,6 +18,7 @@ namespace BeetleBase
         public DataSet pictureset;
         public int index = 1;
         public int indexmax = 1;
+        public bool refresh = true;
         public Form3(DB thefile, mutual mutual)
         {
             this.mutual = mutual;
@@ -27,13 +28,13 @@ namespace BeetleBase
             this.prevbutton.Enabled = false;
 
             this.thefile = thefile;
-            OleDbCommand tribesearch = new OleDbCommand(@" SELECT DISTINCT Tribe FROM [Species_table_NEW];", this.thefile.dbo);
+            OleDbCommand tribesearch = new OleDbCommand(@" SELECT DISTINCT Tribe FROM [Species_table];", this.thefile.dbo);
             OleDbDataAdapter tribeadapter = new OleDbDataAdapter(tribesearch);
             DataSet tribeset = new DataSet();
             tribeadapter.Fill(tribeset, "TRIBE");
-            tribeadapter.SelectCommand.CommandText = @"SELECT Genus FROM [Unique Genus];";
+            tribeadapter.SelectCommand.CommandText = @"SELECT DISTINCT [Genus] FROM [Species_table];";
             tribeadapter.Fill(tribeset, "GENUS");
-            tribeadapter.SelectCommand.CommandText = @"SELECT Species FROM [Unique Species];";
+            tribeadapter.SelectCommand.CommandText = @"SELECT DISTINCT [species] FROM [Species_table];";
             tribeadapter.Fill(tribeset, "SPECIES");
             tribeadapter.Dispose();
             //            MessageBox.Show(tribeset.Tables["SPECIES"].Columns[0].ColumnName);
@@ -59,16 +60,20 @@ namespace BeetleBase
 
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            if (!this.refresh)
+            {
+                return;
+            }
             if (this.comboBox1.Text != "" && this.comboBox1.Text != " " && this.comboBox1.Text != "  ")
             {
                 this.Cursor = Cursors.WaitCursor;
                 DataSet genusset = new DataSet();
                 DataSet speciesset = new DataSet();
-                string genusselection = @"SELECT DISTINCT Genus FROM [Species_table_NEW] WHERE [Tribe] ='" + comboBox1.Text + "';";
+                string genusselection = @"SELECT DISTINCT Genus FROM [Species_table] WHERE [Tribe] ='" + comboBox1.Text + "';";
                 OleDbCommand genussearch = new OleDbCommand(genusselection, this.thefile.dbo);
                 OleDbDataAdapter speciesadapter = new OleDbDataAdapter(genussearch);
                 speciesadapter.Fill(genusset, "GENUS");
-                string speciesselection = @"SELECT DISTINCT Species FROM [Species_table_NEW] WHERE [Tribe] ='" + comboBox1.Text + "';";
+                string speciesselection = @"SELECT DISTINCT Species FROM [Species_table] WHERE [Tribe] ='" + comboBox1.Text + "';";
                 speciesadapter.SelectCommand.CommandText = speciesselection;
                 speciesadapter.Fill(speciesset, "SPECIES");
                 comboBox2.Items.Clear();
@@ -91,16 +96,20 @@ namespace BeetleBase
 
         private void comboBox2_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            if (!this.refresh)
+            {
+                return;
+            }
             if (this.comboBox2.Text != "" && this.comboBox2.Text != " " && this.comboBox2.Text != "  ")
             {
                 this.Cursor = Cursors.WaitCursor;
                 DataSet tribeset = new DataSet();
                 DataSet speciesset = new DataSet();
-                string tribeselection = @"SELECT DISTINCT Tribe FROM [Species_table_NEW] WHERE [Genus] ='" + comboBox2.Text + "';";
+                string tribeselection = @"SELECT DISTINCT Tribe FROM [Species_table] WHERE [Genus] ='" + comboBox2.Text + "';";
                 OleDbCommand tribesearch = new OleDbCommand(tribeselection, this.thefile.dbo);
                 OleDbDataAdapter speciesadapter = new OleDbDataAdapter(tribesearch);
                 speciesadapter.Fill(tribeset, "TRIBE");
-                string speciesselection = @"SELECT DISTINCT Species FROM [Species_table_NEW] WHERE [Genus] ='" + comboBox2.Text + "';";
+                string speciesselection = @"SELECT DISTINCT Species FROM [Species_table] WHERE [Genus] ='" + comboBox2.Text + "';";
                 speciesadapter.SelectCommand.CommandText = speciesselection;
                 speciesadapter.Fill(speciesset, "SPECIES");
                 comboBox1.Items.Clear();
@@ -123,16 +132,20 @@ namespace BeetleBase
 
         private void comboBox3_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            if (!this.refresh)
+            {
+                return;
+            }
             if (this.comboBox3.Text != "" && this.comboBox3.Text != " " && this.comboBox3.Text != "  ")
             {
                 this.Cursor = Cursors.WaitCursor;
                 DataSet tribeset = new DataSet();
                 DataSet genusset = new DataSet();
-                string tribeselection = @"SELECT DISTINCT Tribe FROM [Species_table_NEW] WHERE Species ='" + comboBox3.Text + "';";
+                string tribeselection = @"SELECT DISTINCT Tribe FROM [Species_table] WHERE Species ='" + comboBox3.Text + "';";
                 OleDbCommand tribesearch = new OleDbCommand(tribeselection, this.thefile.dbo);
                 OleDbDataAdapter tribeadapter = new OleDbDataAdapter(tribesearch);
                 tribeadapter.Fill(tribeset, "TRIBE");
-                string genusselection = @"SELECT DISTINCT Genus FROM [Species_table_NEW] WHERE Species ='" + comboBox3.Text + "'";
+                string genusselection = @"SELECT DISTINCT Genus FROM [Species_table] WHERE Species ='" + comboBox3.Text + "'";
                 if (this.comboBox1.Text != "" && this.comboBox1.Text != " " && this.comboBox1.Text != "  ")
                 {
                     genusselection += " AND Tribe='" + comboBox1.Text + "'";
@@ -159,11 +172,15 @@ namespace BeetleBase
 
         private void comboBox3_Leave(object sender, EventArgs e)
         {
-            MessageBox.Show("left!");
+//            MessageBox.Show("left!");
         }
 
         private void updateGridViewsForm3(object sender, EventArgs e)
         {
+            if (!this.refresh)
+            {
+                return;
+            }
             int genusselected = 0;
             int tribeselected = 0;
             string masterselect = "";
@@ -198,7 +215,7 @@ namespace BeetleBase
                 masterselect += " species ='" + comboBox3.Text + "'";
             }
             //            string speciescodeselect = "SELECT SpCode, species FROM [Species_table]" + masterselect;
-            string relationselect = "SELECT SpCode, species, genus, tribe FROM [Species_table_NEW]" + masterselect;
+            string relationselect = "SELECT SpCode, species, genus, tribe FROM [Species_table]" + masterselect;
             //            DataSet SpCode = new DataSet();
             DataSet Relation = new DataSet();
             OleDbCommand fetch = new OleDbCommand(relationselect, this.thefile.dbo);
@@ -210,7 +227,7 @@ namespace BeetleBase
 
         private void dataGridView1_MouseUp(object sender, MouseEventArgs e)
         {
-
+            this.refresh = false;
             DataGridViewSelectedRowCollection editted;
             DataGridViewCellCollection col;
             if (this.dataGridView1.SelectedCells.Count == 1 && this.dataGridView1.SelectedRows.Count < 1)
@@ -241,7 +258,7 @@ namespace BeetleBase
 
                 try
                 {
-                    string picturecommand = "SELECT b.[ImagePath] FROM([Species_table_NEW] a RIGHT JOIN[Images] b ON a.[SpCode] = b.[code]) WHERE a.[SpCode] = " + col[0].Value.ToString();
+                    string picturecommand = "SELECT b.[ImagePath] FROM([Species_table] a RIGHT JOIN[Images] b ON a.[SpCode] = b.[SpCode]) WHERE a.[SpCode] = " + col[0].Value.ToString();
                     this.pictureset = new DataSet();
                     OleDbCommand picturefetch = new OleDbCommand(picturecommand, this.thefile.dbo);
                     OleDbDataAdapter fetchadapter = new OleDbDataAdapter(picturefetch);
@@ -293,13 +310,13 @@ namespace BeetleBase
                 {
                     this.comboBox3.Text = col[1].Value.ToString();
                 }
-                catch (NullReferenceException) { MessageBox.Show("A"); }
+                catch (NullReferenceException) { }
                 finally { }
                 try
                 {
                     this.mutual.result1 = col[0].Value.ToString();
                 }
-                catch (NullReferenceException) { }
+                catch (NullReferenceException) { MessageBox.Show("null"); }
                 finally { }
             }
             else
@@ -307,6 +324,7 @@ namespace BeetleBase
                 this.picturelabel.Text = null;
                 this.pictureBox1.Image = null;
             }
+            this.refresh = true;
         }
 
 
@@ -330,13 +348,13 @@ namespace BeetleBase
             this.comboBox1.Items.Clear();
             this.comboBox2.Items.Clear();
             this.comboBox3.Items.Clear();
-            OleDbCommand tribesearch = new OleDbCommand(@" SELECT DISTINCT Tribe FROM [Species_table_NEW];", this.thefile.dbo);
+            OleDbCommand tribesearch = new OleDbCommand(@" SELECT DISTINCT Tribe FROM [Species_table];", this.thefile.dbo);
             OleDbDataAdapter tribeadapter = new OleDbDataAdapter(tribesearch);
             DataSet tribeset = new DataSet();
             tribeadapter.Fill(tribeset, "TRIBE");
-            tribeadapter.SelectCommand.CommandText = @"SELECT Genus FROM [Unique Genus];";
+            tribeadapter.SelectCommand.CommandText = @"SELECT DISTINCT [Genus] FROM [Species_table];";
             tribeadapter.Fill(tribeset, "GENUS");
-            tribeadapter.SelectCommand.CommandText = @"SELECT Species FROM [Unique Species];";
+            tribeadapter.SelectCommand.CommandText = @"SELECT DISTINCT [species] FROM [Species_table];";
             tribeadapter.Fill(tribeset, "SPECIES");
             //            MessageBox.Show(tribeset.Tables["SPECIES"].Columns[0].ColumnName);
             int triberowcount = tribeset.Tables["TRIBE"].Rows.Count;
