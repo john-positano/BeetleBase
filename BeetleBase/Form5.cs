@@ -254,7 +254,7 @@ namespace BeetleBase
                     else
                     {
                         deleter = "DELETE FROM [Species_table] WHERE [SpCode] = " + del;
-                        predeleter = "DELETE FROM [SPECIES_IN_COLLECTIONS] WHERE [SpCode] Is Null";
+                        predeleter = "DELETE FROM [SPECIES_IN_COLLECTIONS] WHERE [SpCode] = " + del;
                     }
                     OleDbCommand prefirst = new OleDbCommand(predeleter, this.thefile.dbo);
                     OleDbCommand first = new OleDbCommand(deleter, this.thefile.dbo);
@@ -391,9 +391,7 @@ namespace BeetleBase
                     string inserter = "";
                     if (this.cn == "speciestable")
                     {
-                        inserter = "INSERT INTO [Species_table] ([Tribe], [Genus], [species]) VALUES ("
-                        + a.Value.ToString() + ", "
-//                        + dataGridView1.Rows[a.Key].Cells[0].Value.ToString() + ", '"
+                        inserter = "INSERT INTO [Species_table] ([Tribe], [Genus], [species]) VALUES ('"
                         + dataGridView1.Rows[a.Key].Cells[1].Value.ToString() + "', '"
                         + dataGridView1.Rows[a.Key].Cells[2].Value.ToString() + "', '"
                         + dataGridView1.Rows[a.Key].Cells[3].Value.ToString() + "')";
@@ -446,12 +444,13 @@ namespace BeetleBase
                         + dataGridView1.Rows[a.Key].Cells[0].Value.ToString()
                         + "')";
                     }
+  //                  OleDbCommand precmd = new OleDbCommand("INSERT INTO [SPECIES_IN_COLLECTIONS] ([SpCode]) ", this.thefile.dbo);
                     OleDbCommand cmd = new OleDbCommand(inserter, this.thefile.dbo);
                     cmd.ExecuteNonQuery();
                 }
                 catch (OleDbException err)
                 {
-                    err.ToString();
+
                 }
             }
        }

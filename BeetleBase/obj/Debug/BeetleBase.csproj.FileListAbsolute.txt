@@ -18,3 +18,23 @@ C:\Users\John\documents\visual studio 2015\Projects\BeetleBase\BeetleBase\obj\De
 C:\Users\John\documents\visual studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\Scolytos 2 v2.0.0.application
 C:\Users\John\documents\visual studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\Scolytos 2 v2.0.0.exe
 C:\Users\John\documents\visual studio 2015\Projects\BeetleBase\BeetleBase\obj\Debug\Scolytos 2 v2.0.0.pdb
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\bin\Debug\Scolytos 2 v2.0.0.exe.config
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\Scolytos 2 v2.0.0.exe
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\Scolytos 2 v2.0.0.pdb
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\bin\Debug\Scolytos 2 v2.0.0.exe.manifest
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\bin\Debug\Scolytos 2 v2.0.0.application
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\bin\Debug\Scolytos 2 v2.0.0.exe
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\bin\Debug\Scolytos 2 v2.0.0.pdb
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\BeetleBase.csprojResolveAssemblyReference.cache
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\BeetleBase.Form1.resources
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\BeetleBase.Form2.resources
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\BeetleBase.Form3.resources
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\BeetleBase.Form4.resources
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\BeetleBase.Form5.resources
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\BeetleBase.Form6.resources
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\Scolytos2.Form8.resources
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\Scolytos2.speciesLookUpForm.resources
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\Scolytos2.Properties.Resources.resources
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\BeetleBase.csproj.GenerateResource.Cache
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\Scolytos 2 v2.0.0.exe.manifest
+C:\Users\Denis\Desktop\BeetleBase\BeetleBase\BeetleBase\obj\Debug\Scolytos 2 v2.0.0.application

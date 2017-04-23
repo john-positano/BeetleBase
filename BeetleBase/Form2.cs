@@ -755,6 +755,7 @@ namespace BeetleBase
                     {
                     */
                     string cmd = "SELECT * FROM [Images] WHERE [SpCode] = " + editted[0].Cells[13].Value.ToString() + " ORDER BY [code] ASC";
+                    MessageBox.Show(cmd);
                     OleDbCommand test = new OleDbCommand(cmd, this.thefile.dbo);
                     OleDbDataAdapter begin = new OleDbDataAdapter(test);
                     this.dataset = new DataSet();

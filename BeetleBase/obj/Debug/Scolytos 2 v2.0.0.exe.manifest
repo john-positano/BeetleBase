@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Scolytos 2 v2.0.0.exe" size="135640">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Scolytos 2 v2.0.0.exe" size="137176">
       <assemblyIdentity name="Scolytos 2 v2.0.0" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>4eTl+sJGuvQFBkSC8+B3NArwMePlu7cKjzNVeLdcj/o=</dsig:DigestValue>
+        <dsig:DigestValue>d77znvhu0LUcYBtlvUTUMA1du0DnE2Sk6ixuQYc6XDo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
